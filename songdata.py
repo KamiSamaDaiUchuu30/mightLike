@@ -7,6 +7,9 @@ songLib = [row for row in csv.reader(open("ptSongLib.tsv", encoding='utf-8'),del
 def change(val):
   for song in range(len(songLib)):
     songLib[song][val] = int(songLib[song][val])
+def lowercase(val):
+  for song in range(len(songLib)):
+    songLib[song][val].lower
  # compare intger                                               
 def compare(user, ele, col, lis):
   for x in range(len(ele)):
@@ -23,15 +26,19 @@ def comparegen(user, ele, col,lis):
     if (user == ele[x][col] or (user == ele[x][col+1])):
       lis.append(ele[x])
 #check amount of song
-def length(length):
+def length(length,ele):
   if(len(length) == 1):
     print(length[0][0])
     global t
     t = True
   elif(len(length) == 0):
     print("cant match any song")
+    print("try these song")
+    for x in range(len(ele)):
+      print(ele[x][0])
+    t = True
 # ask question
-def askintq(check, uanswer, data):
+def askintQ(check, uanswer, data):
     while check == False:
         try:
           print("Please rate the",data,"of your song.")
@@ -47,8 +54,38 @@ def askintq(check, uanswer, data):
     #check if user putted a string or float
         except ValueError:
             print("you inputted a letter. We do not aceapt letter")
-
-
+ #ask year           
+def askyearQ(check, uanswer, data):
+    while check == False:
+        try:
+          print("Please put in the",data,"of your song.")
+          uanswer = int(input("(1900 to 2019 only)"))
+          #check if answer in range
+          if 1900 < uanswer < 2020:           
+            check = True
+            global uAdd
+            uAdd = uanswer
+          #outside range
+          else:
+            print("your year outside range")   
+    #check if user putted a string or float
+        except ValueError:
+            print("you inputted a letter. We do not aceapt letter")
+#ask string question
+def askstrQ(check, uanswer, data,choice):
+    while check == False:
+        try:
+          print("Please put in the",data,"of your song.")
+          uanswer = str(input(choice))
+          #check if answer in range
+          uanswer.lower
+          global ustring
+          ustring = uanswer
+          check = True
+            
+    #check if user putted a string or float
+        except ValueError:
+            print("you inputted a letter. We do not aceapt letter")
 songLib = tuple(songLib)
 rhy = []
 mel = []
@@ -64,52 +101,67 @@ uRhy = 0
 uMel = 0
 uTemp = 0
 uLyr = 0
-uMood = str("sad")
-uYear = 2017
-uLang = str("English")
-uGenre = str("pop")
+uMood = str("")
+uYear = 0
+uLang = str("")
+uGenre = str("")
 global t
 global uAdd
+global ustring
 uAdd = 0
+ustring = ("")
 check = False
 t = False
-
-#ask question
-askintq(check, uRhy, "rhythm")
+#choice
+uMAnswer = str("depress, sad, happy, upbeat")
+#ask int question
+askintQ(check, uRhy, "rhythm")
 uRhy += uAdd
-askintq(check, uMel, "melody")
+askintQ(check, uMel, "melody")
 uMel += uAdd
-askintq(check, uTemp, "tempo")
+askintQ(check, uTemp, "tempo")
 uTemp += uAdd
-askintq(check, uLyr, "lyric")
+askintQ(check, uLyr, "lyric")
 uLyr += uAdd
+askyearQ(check,uYear,"year")
+uYear += uAdd
+
+#ask str question
+askstrQ(check,uMood,"mood", uMAnswer)
+uMood = ustring
+askstrQ(check, uLang, "language", "offcial real language")
+uLang = ustring
+askstrQ(check, uGenre, "genre", "real offcial name of genre")
+uGenre = ustring
 
 
 
-
-
+#change string to intger
 change(4)
-print(uRhy)
+lowercase(3)
+lowercase(5)
+lowercase(6)
+lowercase(8)
 
 for i in range(7):
   change(i+a)
 while t == False:
   compare(uRhy, songLib, 14, rhy)
-  length(rhy)
+  length(rhy,songLib)
   compare(uMel, rhy, 13, mel)
-  length(mel)
+  length(mel,rhy)
   compare(uTemp, mel, 16, temp)
-  length(temp)
+  length(temp,mel)
   compare(uLyr, temp, 11, lyr)
-  length(lyr)
+  length(lyr,temp)
   compareSt(uMood, lyr, 8, mood)
-  length(mood)
+  length(mood,lyr)
   compareSt(uYear, mood, 4, year)
-  length(year)
+  length(year,mood)
   compareSt(uLang, year, 3, lang)
-  length(lang)
+  length(lang,year)
   comparegen(uGenre, lang, 5, genre)
-  length(genre)
+  length(genre,lang)
 
 
 
